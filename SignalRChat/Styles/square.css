@@ -1,0 +1,14 @@
+﻿.square {
+    border: solid 1px #9a9baf;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+.squareselected {
+    border-color: #359717;
+    box-shadow: 3px 3px 2px #888888;
+
+    -ms-transform: scale(2,4); /* IE 9 */
+    -webkit-transform: scale(2,4); /* Chrome, Safari, Opera */
+    transform: scale(2,4);
+}

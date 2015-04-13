@@ -1,0 +1,111 @@
+﻿<style>
+    .progressbar {
+        border: 1px solid green;
+        font-size: 40pt;
+    }
+
+    .angled {
+        background-color: magenta;
+    }
+</style>
+
+<head>
+    <!-- <script src="/Scripts/JQuery/jquery-1.6.4.min.js" ></script> -->
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+</head>
+
+<body>
+<input id=date type=text value='' />
+<br>
+<br>
+<span id=prbar></span>
+<br>
+
+<input id=incbutt type=button onclick='bar.increase()' value=increase />
+<input type=button onclick='bar.draggable({ disabled: true })' value='stop dragging' />
+<input type=button onclick='bar.destroy()' value='destroy' />
+</body>
+
+<script>
+        $("#date").datepicker();
+
+        $.widget("nmk.progressbar", {
+                options: {
+                        value: 0
+                },
+
+                _create: function () {
+                        this.element.addClass("progressbar");
+                        this.value(this.value());
+
+                        this._on(this.element, {
+                                "click": function (event) {
+                                        this.increase();
+                                },
+                                "dragstart": function (event) {
+                                        this.element.addClass('angled');
+                                },
+                                "drag": function (angle) {
+                                        return function (event) {
+                                                angle = angle + 1;
+                                                this.element.css({
+                                                        '-ms-transform': 'rotate(' + angle + 'deg)',
+                                                        '-webkit-transform': 'rotate(' + angle + 'deg)',
+                                                        'transform': 'rotate(' + angle + 'deg)'
+                                                });
+                                        }
+                                }(0),
+                                "dragstop": function (event) {
+                                        this.element.removeClass('angled');
+                                }
+                        });
+                },
+
+                _destroy: function () {
+                        this.element.removeClass("progressbar");
+                },
+
+                // public method.
+                value: function (value) {
+                        if (value === undefined) {
+                                return this.options.value;
+                        }
+
+                        this.options.value = this._constrain(value);
+                        this.element.text(this.options.value + "%");
+                        return this;
+                },
+
+                increase: function (delta) {
+                        delta = delta || 1;
+                        this.value(this.value() + delta);
+                },
+
+                draggable: function (options) {
+                        this.element.draggable(options);
+                },
+
+                // private method.
+                _constrain: function (value) {
+                        if (value > 100) {
+                                value = 100;
+                        }
+                        if (value < 0) {
+                                value = 0;
+                        }
+                        return value;
+                }
+        });
+
+        var bar = $.nmk.progressbar({ value: 50 }, $('#prbar'));
+        bar.value(80).draggable();
+
+
+
+</script>
+
+
+
+
+

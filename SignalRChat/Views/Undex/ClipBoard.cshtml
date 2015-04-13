@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Clipboard</title>
+    <script src="/Scripts/JQuery/jquery-1.6.4.min.js" ></script>
+    <script src="/Scripts/ClipBoard.js"></script>
+</head>
+
+
+<body>
+<script>
+        ClipBoard(function (val) {
+                $("<div>[" + val + "]</div>").appendTo("#pastes");
+        });
+</script>
+
+<input id="visible" type=text value='type here' />
+<div id="pastes"></div>
+</body> 
+
+</html>

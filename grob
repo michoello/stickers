@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+# echo $*
+
+/c/cygwin64/bin/grep $*

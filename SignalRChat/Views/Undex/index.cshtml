@@ -1,0 +1,127 @@
+﻿@model ModelNS.Model
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Simple Chat</title>
+<!--    <style type="text/css">
+        .container {
+            background-color: #99CCFF;
+            border: thick solid #808080;
+            padding: 20px;
+            margin: 20px;
+        }
+    </style> -->
+
+    <link rel="stylesheet" type="text/css" href="/styles/square.css">
+
+
+
+    <script src="/Scripts/JQuery/jquery-1.6.4.min.js" ></script>
+
+    <script src="/Scripts/Items/Fridge.js" ></script>
+    <script src="/Scripts/Items/Square.js" ></script>
+    <script src="/Scripts/Items/TextFrag.js" ></script>
+
+    <script src="/Scripts/ClipBoard.js"></script>
+</head>
+
+<body style="font-family: Tahoma;">
+
+<!-- facebook stuff start -->
+<script>
+        window.fbAsyncInit = function () {
+                FB.init({
+                        appId: '1026219700727640',
+                        xfbml: true,
+                        version: 'v2.2'
+                });
+        };
+
+        (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+<!-- facebook stuff end -->
+
+
+    @ChatekHelper.Chatek(Model)
+
+    <div id="fridge" style="width:100%;height:400px;background-color:#fefefe;">
+<!--        <canvas id="fridgeCanvas" width="800px" height="400px" style="border: 1px solid #d3d3d3;">No canvas support</canvas> -->
+    </div>
+
+    <script>
+        var fridge = Fridge(); // global variable
+
+        $(function () {
+                var browser = jQuery.browser;
+
+                $(document).bind('keypress', function (e) {
+                        e.keyCode = e.keyCode || e.which;
+
+                        if (browser['mozilla'] == true) {
+                                e.keyCode = e.charCode;
+                        }
+
+                        Echo('body keypress', e.keyCode, ' ', e.charCode);
+                        fridge.keyPress(e);
+
+                        if (e.keyCode == 8 || e.keyCode == 32) {
+                             e.preventDefault();
+                        }
+                        
+                });
+                $('body').bind('keydown', function (e) {
+                        e.keyCode = e.keyCode || e.which;
+                        Echo('body keydown', e.keyCode, browser);
+
+                        if (browser['msie'] == true && (e.keyCode == 13)) { //  || e.keyCode == 8)) {
+                                fridge.keyPress(e);
+                        }
+
+                        var k = e.keyCode;
+                        if (k == 40 || k == 38 || k == 37 || k == 39) // arrows
+                        {
+                                fridge.keyPress(e);
+                        }
+
+
+                        if (browser['mozilla'] == true && (e.keyCode == 13)) {
+                                fridge.keyPress(e);
+                        }
+
+                        if (e.keyCode == 8) {
+                             fridge.keyPress(e);
+                             e.preventDefault();
+                        }
+                });
+                /*$('body').bind('keyup', function (e) {
+                        Echo('body keyup', e.which, e.keyCode, jQuery.browser);
+                });*/
+
+
+                ClipBoard(function (val) {
+                        Echo("Paste: ", val);
+                        fridge.addSquareWithText(val);
+                });
+
+        });
+    </script>
+
+
+
+
+</body>
+</html>
